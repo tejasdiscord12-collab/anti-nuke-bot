@@ -7,6 +7,14 @@ module.exports = {
     name: Events.MessageCreate,
     async execute(message, client) {
         if (message.author.bot) return;
+
+        // DEBUG: Check if bot sees the message
+        if (message.content.startsWith('!')) {
+            console.log(`[DEBUG] Received command: ${message.content} from ${message.author.tag} (${message.author.id})`);
+            console.log(`[DEBUG] Owner Dictionary: ${JSON.stringify(OWNER_IDS)}`);
+            console.log(`[DEBUG] Is Owner? ${OWNER_IDS.includes(message.author.id)}`);
+        }
+
         const prefix = '!';
         if (!message.content.startsWith(prefix)) return;
 
