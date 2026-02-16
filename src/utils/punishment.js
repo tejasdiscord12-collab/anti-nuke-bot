@@ -1,5 +1,6 @@
 const { logSecurityEvent } = require('./logger');
 const { OWNER_IDS, SECURITY_LOG_CHANNEL_ID, SECONDARY_LOG_CHANNEL_ID } = require('../../config');
+const { isWhitelisted } = require('./whitelistManager');
 const { EmbedBuilder } = require('discord.js');
 
 /**
@@ -56,8 +57,8 @@ async function runDramaticBan(client, primaryChannel, executorMember, targetLabe
             await new Promise(r => setTimeout(r, 1000));
         }
 
-        // Final Safety Check: Don't ban owners!
-        if (OWNER_IDS.includes(executorMember.id)) {
+        // Final Safety Check: Don't ban owners or whitelisted users!
+        if (OWNER_IDS.includes(executorMember.id) || isWhitelisted(executorMember.id)) {
             alertEmbed.setTitle('🛡️ SECURITY BYPASS DETECTED 🛡️')
                 .setDescription(`**System recognized <@${executorMember.id}> as a trusted operator.**\n\n> \`Result:\` **BAN ABORTER**\n> \`Message:\` Welcome back, Commander.`)
                 .setColor(0x00ff00)
